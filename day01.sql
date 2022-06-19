@@ -39,5 +39,6 @@ select * from student; -- bu select * from ile secilen tablodaki tum verileri ge
 select name from student; -- bu kez sadece student tablosundaki isim basligi altindaki verileri getirecek
 select age, id from student; -- bu komutla hem yas hemde id leri yazma sirama gore getirecek.
 
+-- TABLO SILME:
 drop table student; -- student tablosu silinir istersek soldaki bolumdede sag tiklayip drop yapabiliyoruz.
 
