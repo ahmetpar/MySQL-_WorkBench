@@ -95,3 +95,88 @@ select * from personel where isim like '_g%'; -- ilk harf ne olursa olsun '_' ik
 
 -- soru 14: isminin ilk harfi T, Son harfi 'N', ucuncu harfi 'h' ve maasi 100000 den fazla olan kisiyi listeleyin
 select * from personel where isim like 't%'  and isim like'__h%' and isim like '%n' and maas >=100000;
+
+-- soru 15: isminin 2. harfi e olup diger harflerinde r olan personel
+select * from personel where isim like '_e%r%'; -- ikinci harf e ve %arasinda nerede olursa olsun r olan%
+
+-- soru 16: isminde i harfi olmayan personeli listeleyin
+select * from personel where isim not like '%i%'; -- herhangi bir yerinde o harfin olmamasi icin not like '%istenmeyen harf%'
+
+-- soru 16: Maasi 6 haneli olan personeli listeleyin
+select * from personel where maas like '______'; -- 6 tane alt cizgi yaptik
+
+-- soru 17: 2. harfi A ve 5. harfi A olan personeli listeleyin
+select * from personel where isim like '_a%' and isim like '____a%'; -- ya da alternatif cozum
+select * from personel where isim like '_a__a%'; -- ya da alternatif cozum
+
+-- **** CASE SENSITIVE***** 'c' olursa buyuk kucuk harf hassasiyeti vadir, 'i' tam tersi yoktur. default olarak boyledir
+
+CREATE TABLE kelimeler
+(
+id int UNIQUE, -- ayni rakamlar gelmesin diye Unique kullandik
+kelime VARCHAR(50) NOT NULL,
+harf_sayisi int
+);
+    INSERT INTO kelimeler VALUES (1001, 'hot', 3);
+    INSERT INTO kelimeler VALUES (1002, 'hat', 3);
+    INSERT INTO kelimeler VALUES (1003, 'hit', 3);
+    INSERT INTO kelimeler VALUES (1004, 'hbt', 3);
+    INSERT INTO kelimeler VALUES (1005, 'hct', 3);
+    INSERT INTO kelimeler VALUES (1006, 'adem', 4);
+    INSERT INTO kelimeler VALUES (1007, 'selim', 5);
+    INSERT INTO kelimeler VALUES (1008, 'yusuf', 5);
+    INSERT INTO kelimeler VALUES (1009, 'hip', 3);
+    INSERT INTO kelimeler VALUES (1010, 'HOT', 3);
+    INSERT INTO kelimeler VALUES (1011, 'hOt', 3);
+    INSERT INTO kelimeler VALUES (1012, 'h9t', 3);
+    INSERT INTO kelimeler VALUES (1013, 'hoot', 4);
+    INSERT INTO kelimeler VALUES (1014, 'haaat', 5);
+    INSERT INTO kelimeler VALUES (1015, 'hooooot', 5);
+    
+select * from kelimeler;
+
+-- SORU16: İçerisinde 'ot' veya 'at' bulunan kelimeleri küçük harfe dikkat ederek listeleyiniz
+-- VEYA işlemi için | karakteri kullanılır.
+select * from kelimeler where regexp_like (kelime, 'ot|at', 'c' ); -- 'ot|at' yazarken aman bosluk birakmayin. 'c' case-sensitive
+select * from kelimeler where kelime like '%oT%' or kelime like '%At%'; -- ya da bu sekilde sorgulariz ama case-sensitive olmaz DAHA COK BULUR
+
+-- SORU17: İçerisinde 'ot' veya 'at' bulunan kelimeleri büyük-küçük harfe dikkat etmeksizin listeleyeniz
+select * from kelimeler where regexp_like (kelime, 'ot|at' );
+select * from kelimeler where regexp_like (kelime, 'ot|at', 'i' ); -- ikiside ayni sonucu verir.
+
+-- SORU18: 'ho' veya 'hi' ile başlayan kelimeleri büyük-küçük harfe dikkat etmeksizin listeleyeniz
+-- Başlangıcı göstermek için ^ karakteri kullanılır.
+select * from kelimeler where kelime like 'ho%' or kelime like 'hi%'; -- ya da
+select * from kelimeler where regexp_like (kelime, '^ho|^hi', 'i' ); -- ya da
+select * from kelimeler where regexp_like (kelime, '^ho|^hi' );
+
+-- SORU18: Sonu 't' veya 'm' ile bitenleri büyük-küçük harfe dikkat etmeksizin listeleyeniz.
+-- Bitişi göstermek için $ karakteri kullanılır.
+select * from kelimeler where regexp_like (kelime, 't$|m$'); 
+
+-- SORU19: h ile başlayıp t ile biten 3 harfli kelimeleri (h ile t küçük harfli olanlari) listeleyeniz
+select * from kelimeler where regexp_like (kelime, '^h|t$','c'); -- bu tum h ile baslayan t ile bitenleri getirdi ama bize sadece 3 harfli olnalar lazim
+select * from kelimeler where regexp_like (kelime, 'h[0-9a-zA-Z]t','c');-- h[]t bu uc harfli bir kelimeyi tanimliyor ama [] bunun icine nelerin gelebilecegi tanimlanmali
+
+-- SORU19A: h ile başlayıp t ile biten 4 harfli kelimeleri (h ile t küçük harfli olanlari) listeleyeniz
+select * from kelimeler where regexp_like (kelime, 'h[0-9a-zA-Z][0-9a-zA-Z]t','c'); -- [][] herbiri bir harfi temsil ediyor
+
+-- SORU20: İlk harfi h, son harfi t olup 2.harfi a veya i olan 3 harfli kelimelerin tüm bilgilerini sorgulayalım.
+select * from kelimeler where regexp_like (kelime, 'h[a|i]t'); -- [a|i] 2. harf icin a yada i olanlari tanimlamak icin boylr yapilir
+
+-- SORU21: İçinde m veya i veya e olan kelimelerin tüm bilgilerini listeleyiniz
+select * from kelimeler where regexp_like (kelime, '[a|i|e]');
+
+-- SORU22: a veya s ile başlayan kelimelerin tüm bilgilerini listeleyiniz.
+select * from kelimeler where regexp_like (kelime, '^a|^s');
+
+-- SORU23: içerisinde en az 2 adet oo barıdıran kelimelerin tüm bilgilerini listeleyiniz.
+select * from kelimeler where regexp_like (kelime, 'oo');
+
+-- SORU24: içerisinde en az 4 adet oooo barıdıran kelimelerin tüm bilgilerini listeleyiniz.
+select * from kelimeler where regexp_like (kelime, 'oooo');
+
+-- SORU25: ilk harfi s veya b , 3. harfi l olan ve 5 harfli olan kelimelerin küçük harfe dikkat ederek listeleyiniz.
+
+
+
