@@ -29,13 +29,13 @@ INSERT INTO calisanlar VALUES('10004', 'Veli Han', 5000, '2018-04-14');
 INSERT INTO calisanlar VALUES('10005', 'Mustafa Ali', 5000, '2018-04-14');
 INSERT INTO calisanlar VALUES('10006', 'Canan Yaş', NULL, '2019-04-12'); -- MAAS NULL OLAMAZ
 INSERT INTO calisanlar VALUES('10003', 'CAN', 5000, '2018-04-14');
-INSERT INTO calisanlar VALUES('10007', 'CAN', 5000, '2018-04-14'); -- UNiQUE
-INSERT INTO calisanlar VALUES('10009', 'cem', '', '2018-04-14');
+INSERT INTO calisanlar VALUES('10007', 'CAN', 5000, '2018-04-14'); -- can UNiQUE olmali
+INSERT INTO calisanlar VALUES('10009', 'cem', '', '2018-04-14');  -- INT maas olmali ve bos bir deger olamaz
 INSERT INTO calisanlar VALUES('', 'osman', 2000, '2018-04-14');
-INSERT INTO calisanlar VALUES('', 'osman can', 2000, '2018-04-14');
+INSERT INTO calisanlar VALUES('', 'osman can', 2000, '2018-04-14'); -- isim uNIQUE OLMALI
 INSERT INTO calisanlar VALUES('', 'veli can', 6000, '2018-04-14');
 INSERT INTO calisanlar VALUES( '10002', 'ayse Yılmaz' ,12000, '2018-04-14');
-INSERT INTO calisanlar VALUES( null, 'filiz ' ,12000, '2018-04-14');
+INSERT INTO calisanlar VALUES( null, 'filiz ' ,12000, '2018-04-14'); -- iSIM PRIMARY KEY not null ve Unique olmali
      
 select * from calisanlar;
      
@@ -49,9 +49,12 @@ sokak VARCHAR(50),
 cadde VARCHAR(30),
 sehir VARCHAR(15),
 CONSTRAINT id_clsnlr FOREIGN KEY(adres_id) REFERENCES calisanlar(id)
--- adresler tablosundaki adres_id ile calisanlar tablosundaki id leri
+-- adresler tablosundaki adres_id ile calisanlar tablosundaki id leri birbirine bagladik
 -- id_clsnlr isminde foreign key ile birbirine bağladik.
 -- (solda tablo seçiliyken üstteki info dan ismi kontrol edebilirsin)
+-- Calisanlar Tablosu Parent, adresler tablosu ise Child oldu. 
+-- Calisanlarin ID'i sutunu bu tablonun adres id'si sutunu ile bag kurdu. 
+-- o yuzden adresler tablosunda adres_id kismina girilen id degeri Parent'te olmayan bir id olamaz !!!
 );
    
 INSERT INTO adresler VALUES('10003','Mutlu Sok', '40.Cad.','IST');
@@ -61,7 +64,7 @@ INSERT INTO adresler VALUES('10002','Ağa Sok', '30.Cad.','Antep');
 select * from adresler;
 
 -- parent tabloda olmayan id ile child a ekleme yapamayiz
-INSERT INTO adresler VALUES('10012','Ağa Sok', '30.Cad.','Antep');
+INSERT INTO adresler VALUES('10012','Ağa Sok', '30.Cad.','Antep'); -- cunku parent tabloda boyle bir id yok 10012PRIMARY
    
 -- FK'ye null değeri atanabilir.
 INSERT INTO adresler VALUES(NULL,'Ağa Sok', '30.Cad.','Antep');
@@ -85,12 +88,10 @@ drop table adresler;
 
 -- child table silindikten sonra parent table da silinebilir.
 
-
-
 delete from calisanlar where id = 10002; -- parent
 -- bağlantı olduğu için silemiyoruz.
      
-delete from adresler where adres_id= 10002; -- child
+delete from adresler where adres_id= 10002; -- child bunun ilgili adres_id'si silindi.
      
      
 /*============================== ON DELETE CASCADE =============================
@@ -125,7 +126,7 @@ CONSTRAINT notlar_fk FOREIGN KEY (talebe_id) REFERENCES talebeler(id)
 on delete cascade);
 
 -- on delete cascade sayesinde
--- parent taki silinen bir kayıt ile ilişkili olan tüm child kayıtlarınısiler.  
+-- parent taki silinen bir kayıt ile ilişkili olan tüm child kayıtlarını siler.  
 -- cascade yoksa önce child temizlenir sonra parent
    
 

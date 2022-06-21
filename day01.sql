@@ -1,4 +1,5 @@
 create database batch59;
+-- books.goalkicker.com IT ile ilgili kitapalari bulunabilecegi guzel bir site
 
 -- aciklama yazabilmek icin "--" ve sonrasinda bir bosluk olmali kullanilir
 /* 
