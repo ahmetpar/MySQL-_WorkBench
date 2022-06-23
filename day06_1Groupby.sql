@@ -33,12 +33,14 @@ select * from manav;
     
     
 -- SORU1: kisi ismine göre satılan toplam meyve miktarlarını gösteren sorguyu yazınız.
-
+select isim, sum(urun_miktari) 
+as toplam_urun 
+from manav group by isim;
 
 
 -- SORU2: satılan meyve türüne (urun_adi) göre urun alan kişi sayısını gösteren
 -- sorguyu yazınız. NULL olarak girilen meyveyi listelemesin.
-
+select urun_adi, count(isim) from manav where urun_adi  is not null group by urun_adi;
 
 
 -- SORU3: satılan meyve türüne (urun_adi) göre satılan (urun_miktari )MIN ve 
